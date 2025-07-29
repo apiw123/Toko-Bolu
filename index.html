@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toko Bolu</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="icon" type="image/png" href="./cake/gambar logo toko.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      margin: 0;
+      background: linear-gradient(to bottom, #fdf6ec, #fff3e0);
+      color: #4e342e;
+      scroll-behavior: smooth;
+      padding-bottom: 100px;
+    }
+
+
+    /* HEADER */
+    header {
+      background: linear-gradient(to right, #f77f00, #fcbf49);
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1,
+    header h2 {
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    header img {
+      height: 45px;
+      border-radius: 50%;
+    }
+
+
+    /* NAVBAR */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      background: #fff;
+      padding: 14px 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav a {
+      color: #333;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      background: #f77f00;
+      color: #fff;
+    }
+
+
+    /* NAVBAR STRIP */
+    #navbar {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 14px;
+      font-weight: bold;
+      background: #f5f7fa;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+
+    }
+
+    #navbarWrapper {
+      background: #fff0dc;
+      box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    #navIndicator {
+      position: absolute;
+      bottom: 0;
+      height: 3px;
+      width: 0;
+      background-color: #ff9800;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      transform: translateX(0);
+    }
+
+
+    /* PAGE WRAPPER */
+    .page {
+      padding: 20px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+    /* PRODUK */
+    .produk-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .produk-card {
+      width: 100%;
+      max-width: 240px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+
+    .produk-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .produk-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .produk-card h4 {
+      margin: 12px 12px 4px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .produk-card p {
+      margin: 0 12px 10px;
+      color: #f57c00;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .produk-card button {
+      margin: 6px 12px 10px;
+      background: #f57c00;
+      color: white;
+      border: none;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .produk-card button:hover {
+      background: #d35400;
+    }
+
+    .produk-card button:first-of-type {
+      background: transparent;
+      color: #f57c00;
+      font-size: 18px;
+      text-align: right;
+      margin: 10px 12px 0 auto;
+      padding: 0;
+    }
+
+    .produk-card button:first-of-type:hover {
+      color: #c44c00;
+      transform: scale(1.1);
+    }
+
+
+    /* MODAL FORM */
+    #formModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      animation: fadeIn 0.3s ease;
+    }
+
+    #formModal form {
+      background: white;
+      padding: 24px;
+      border-radius: 14px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    #formModal input,
+    #formModal select,
+    #formModal button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-family: inherit;
+    }
+
+    #formModal button[type="submit"] {
+      background: #ff8a65;
+      color: white;
+      border: none;
+    }
+
+    #formModal button[type="button"] {
+      background: #fbe9e7;
+      color: #5d4037;
+      border: none;
+    }
+
+
+    /* LOGIN FORM */
+    #loginPage form {
+      background-color: #fffaf4;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 320px;
+      margin: auto;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    #loginForm input,
+    #loginForm select,
+    #loginForm button {
+      border: 1px solid #d7ccc8;
+      background: #fffdf8;
+      padding: 10px;
+      margin-bottom: 14px;
+      border-radius: 8px;
+    }
+
+    #loginForm button {
+      background: #a47148;
+      color: white;
+    }
+
+    #loginForm button:hover {
+      background: #8c5e34;
+    }
+
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .produk-card {
+        max-width: 100%;
+      }
+
+      header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      nav,
+      #navbar {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .produk-grid {
+        gap: 16px;
+      }
+
+      .produk-card {
+        width: 90%;
+      }
+
+      #formModal form {
+        width: 95%;
+      }
+
+      header h1 {
+        font-size: 24px;
+      }
+
+      nav {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px;
+      }
+
+      form {
+        padding: 18px;
+      }
+    }
+
+
+    /* STRIP NAVBAR SCROLL RESPONSIF */
+    @media (max-width: 768px) {
+      nav#navbar {
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        justify-content: flex-start !important;
+        gap: 20px;
+        padding: 10px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      nav#navbar::-webkit-scrollbar {
+        display: none;
+      }
+
+      nav#navbar a {
+        white-space: nowrap;
+        flex: 0 0 auto;
+        font-size: 13px;
+        padding: 6px 10px;
+      }
+
+      body {
+        overflow-x: hidden !important;
+      }
+    }
+
+
+    /* FLOATING EMOJI */
+    .floating-emoji {
+      position: absolute;
+      font-size: 24px;
+      animation: floatUp 1s ease-out forwards;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-80px);
+      }
+    }
+
+
+    /* WHATSAPP FLOAT */
+    .wa-float {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      bottom: 80px;
+      right: 20px;
+      background-color: #25d366;
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    }
+
+    .wa-float:hover {
+      transform: scale(1.1);
+    }
+
+
+    /* UTILITAS */
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    button:hover {
+      opacity: 0.95;
+      transform: scale(1.02);
+    }
+
+    .tersembunyi {
+      display: none !important;
+    }
+  </style>
+
+
+  <style>
+    @keyframes fadeSlideUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Animasi muncul 1 per 1 */
+    .produk-grid .produk-card {
+      opacity: 0;
+      animation: fadeSlideUp 0.6s ease forwards;
+    }
+
+    /* Delay per produk (edit sesuai jumlah produkmu) */
+    .produk-grid .produk-card:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .produk-grid .produk-card:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .produk-grid .produk-card:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .produk-grid .produk-card:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+
+    .produk-grid .produk-card:nth-child(5) {
+      animation-delay: 0.5s;
+    }
+
+    .produk-grid .produk-card:nth-child(6) {
+      animation-delay: 0.6s;
+    }
+  </style>
+
+
+
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <img src="./cake/gambar logo toko.jpg" alt="Logo" />
+    <h2>Toko Bolu Online</h2>
+  </header>
+
+
+  <!-- Login -->
+  <div id="loginPage" class="page hidden">
+    <div
+      style="max-width: 360px; margin: 40px auto; background: #fff5e1; padding: 30px; border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">
+      <h2 style="text-align:center; margin-bottom: 24px; color:#d35400;">Silakan Login</h2>
+      <form id="loginForm">
+        <div style="margin-bottom: 18px;">
+          <label for="username" style="display:block; font-weight:bold; margin-bottom:6px;">Nama / No HP</label>
+          <input type="text" id="username" placeholder="Masukkan nama atau no HP" required
+            style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
+        </div>
+        <div style="margin-bottom: 24px;">
+          <label for="role" style="display:block; font-weight:bold; margin-bottom:6px;">Masuk sebagai</label>
+          <div id="adminPasswordField" class="hidden" style="margin-bottom: 20px;">
+            <label for="adminPassword" style="display:block; font-weight:bold; margin-bottom:6px;">Password
+              Admin</label>
+            <input type="password" id="adminPassword" placeholder="Masukkan password admin"
+              style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
+          </div>
+          <select id="role" required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
+            <option value="user">🛍 Pembeli</option>
+            <option value="admin">🛠 Admin</option>
+          </select>
+        </div>
+        <button type="submit"
+          style="width:100%; padding:12px; background:#f57c00; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; transition:background 0.3s;">Login</button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- Beranda -->
+  <div id="beranda" class="page">
+    <input type="text" id="searchInput" oninput="filterProduk()" placeholder="Cari bolu..."
+      style="display:block; margin: 0 auto 20px; padding:10px; width: 90%; max-width: 400px; border: 1px solid #ccc; border-radius: 8px; font-family:inherit;" />
+    <h3 style="text-align:center;">Pilih Kue Bolu</h3>
+    <div class="produk-grid">
+
+      <!-- Bolu Coklat -->
+      <div class="produk-card" data-nama="bolu coklat">
+        <img src="./cake/brownis besar.jpg">
+        <h4>Bolu Coklat</h4>
+        <button onclick="toggleFavorit(this)"
+          style="background:none; border:none; font-size:20px; cursor:pointer;">🤍</button>
+        <p>Rp 20.000</p>
+        <div
+          style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 12px 12px;">
+          <!-- Tombol Keranjang -->
+          <button onclick="tambahKeKeranjang(this)" style="
+    flex: 0 0 42px;
+    height: 42px;
+    background: #ffffff;
+    border: 1.5px solid #ddd;
+    color: #ff5722;
+    border-radius: 8px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  ">
+            <i class="fas fa-cart-plus"></i>
+          </button>
+
+          <!-- Tombol Beli Sekarang -->
+          <button onclick="showEmojiAnimation(this); showForm('Bolu Coklat')" style="
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: #ff5722;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  ">Beli Sekarang</button>
+        </div>
+
+      </div>
+
+      <!-- Bolu Keju -->
+      <div class="produk-card" data-nama="bolu keju">
+        <img src="./cake/brownis kecil full keju.jpg">
+        <h4>Bolu Keju</h4>
+        <button onclick="toggleFavorit(this)"
+          style="background:none; border:none; font-size:20px; cursor:pointer;">🤍</button>
+        <p>Rp 25.000</p>
+        <div
+          style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 12px 12px;">
+          <!-- Tombol 🛒 dengan border putih -->
+          <button onclick="tambahKeKeranjang(this)" style="
+    flex: 0 0 42px;
+    height: 42px;
+    background: #ffffff;
+    border: 1.5px solid #ddd;
+    color: #ff5722;
+    border-radius: 8px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  ">
+            <i class="fas fa-cart-plus"></i>
+          </button>
+
+          <!-- Tombol Beli Sekarang -->
+          <button onclick="showEmojiAnimation(this); showForm('Bolu Keju')" style="
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: #ff5722;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  ">Beli Sekarang</button>
+        </div>
+
+      </div>
+
+      <!-- Bolu Pandan -->
+      <div class="produk-card" data-nama="bolu pandan">
+        <img src="./cake/bolu pandan.jpg">
+        <h4>Bolu Pandan</h4>
+        <button onclick="toggleFavorit(this)"
+          style="background:none; border:none; font-size:20px; cursor:pointer;">🤍</button>
+        <p>Rp 22.000</p>
+        <div
+          style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 12px 12px;">
+          <!-- Tombol 🛒 dengan border putih -->
+          <button onclick="tambahKeKeranjang(this)" style="
+  flex: 0 0 42px;
+  height: 42px;
+  background: #ffffff;
+  border: 1.5px solid #ddd;
+  color: #ff5722;
+  border-radius: 8px;
+  font-size: 18px;
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+">
+            <i class="fas fa-cart-plus"></i>
+          </button>
+
+
+          <!-- Tombol Beli Sekarang -->
+          <button onclick="showEmojiAnimation(this); showForm('Bolu Pandan')" style="
+  flex: 1;
+  height: 42px;
+  background: #ff5722;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+">
+            Beli Sekarang
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Pembayaran -->
+  <div id="formModal">
+    <form id="bookingForm" enctype="multipart/form-data"
+      style="background:#fffaf4; padding:30px; border-radius:20px; width:90%; max-width:440px; box-shadow:0 10px 25px rgba(0,0,0,0.2); position:relative;">
+      <h2 style="text-align:center; color:#d35400; margin-bottom:20px;">Form Pemesanan</h2>
+
+      <label for="name" style="font-weight:bold; display:block; margin-bottom:6px;">Nama Penerima</label>
+      <input type="text" name="name" placeholder="Contoh: Budi" required
+        style="padding:12px; border-radius:10px; border:1px solid #ccc; margin-bottom:16px; width:94%;">
+
+      <label for="phone" style="font-weight:bold; display:block; margin-bottom:6px;">No HP Penerima</label>
+      <input type="text" name="phone" placeholder="Contoh: 08123456789" required
+        style="padding:12px; border-radius:10px; border:1px solid #ccc; margin-bottom:16px; width:94%;">
+
+      <label for="product" style="font-weight:bold; display:block; margin-bottom:6px;">Produk</label>
+      <input type="text" name="product" id="selectedProduct" readonly
+        style="padding:12px; border-radius:10px; background:#fff0dc; border:1px solid #ccc; margin-bottom:16px; width:94%; font-weight:bold;">
+
+      <label for="quantity" style="font-weight:bold; display:block; margin-bottom:6px;">Jumlah</label>
+      <input type="number" name="quantity" placeholder="Jumlah pesanan" required
+        style="padding:12px; border-radius:10px; border:1px solid #ccc; margin-bottom:16px; width:94%;">
+
+      <label for="paymentMethod" style="font-weight:bold; display:block; margin-bottom:6px;">Metode Pembayaran</label>
+      <select name="paymentMethod" required
+        style="padding:12px; border-radius:10px; border:1px solid #ccc; margin-bottom:16px; width:100%;">
+        <option value="">-- Pilih Metode --</option>
+        <option value="Transfer">Transfer</option>
+        <option value="COD">COD (Bayar di Tempat)</option>
+      </select>
+
+      <label for="buktiBayar" style="font-weight:bold; display:block; margin-bottom:6px;">Upload Bukti Transfer (jika
+        ada)</label>
+      <input type="file" name="buktiBayar" accept="image/*" style="margin-bottom:20px; width: 95%;">
+
+      <div style="display:flex; gap:10px; justify-content:space-between;">
+        <button type="submit"
+          style="flex:1; background:#d35400; color:white; padding:12px; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">Pesan
+          Sekarang</button>
+        <button type="button" onclick="closeForm()"
+          style="flex:1; background:#fbe9e7; color:#5d4037; padding:12px; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">Batal</button>
+      </div>
+
+      <!-- Diskon & Total -->
+      <div id="infoDiskon" style="margin-top:10px; font-size:15px; color:#5d4037;"></div>
+
+    </form>
+  </div>
+
+
+  <!-- Pesanan -->
+  <div id="pesanan" class="page hidden">
+    <h4>Status Pesanan per Produk</h4>
+    <div id="daftarPesananPerProduk"></div>
+  </div>
+
+
+  <!-- Profil -->
+  <div id="profil" class="page hidden">
+    <div
+      style="max-width:420px; margin:40px auto; background:#fff7ec; padding:30px; border-radius:20px; box-shadow:0 8px 24px rgba(0,0,0,0.08); text-align:center; border:1px solid #ffd59e;">
+      <div style="position:relative; display:inline-block;">
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User"
+          style="width:90px; height:90px; border-radius:50%; border:4px solid #ffcc80; background:#fff;">
+      </div>
+      <h3 style="color:#d88c63; margin-top:16px; margin-bottom:8px; font-size:22px;">Profil Pengguna</h3>
+      <p style="font-size:16px; margin:6px 0;"><strong>👤 Nama:</strong> <span id="userName"></span></p>
+      <p style="font-size:16px; margin:6px 0;"><strong>🔑 Peran:</strong> <span id="userRole"></span></p>
+
+      <div id="authButtons" style="margin-top:24px; display:flex; flex-direction:column; align-items:center; gap:12px;">
+        <button id="btnEditProfil" onclick="bukaEditProfil()"
+          style="padding:10px 24px; background:#a1887f; color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">Edit
+          Profil</button>
+        <div style="display:flex; gap:10px;">
+          <button id="logoutBtn" onclick="logout()"
+            style="padding:10px 20px; background:#f57c00; color:white; border:none; border-radius:10px; font-weight:bold;">Logout</button>
+          <button id="loginBtn" onclick="showPage('loginPage')"
+            style="padding:10px 20px; background:#6c757d; color:white; border:none; border-radius:10px; font-weight:bold;">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Tentang Kami -->
+  <div id="tentang" class="page hidden">
+    <div
+      style="max-width:600px; margin:auto; background:#fff8e1; padding:30px; border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,0.08);">
+      <h2 style="color:#d35400; text-align:center; margin-bottom:20px;">🏡 Tentang Kami</h2>
+      <p style="font-size:16px; color:#5d4037; line-height:1.6;">
+        Toko Bolu Online adalah usaha rumahan yang membuat bolu secara <strong>homemade</strong> dari bahan berkualitas
+        tanpa pengawet.
+        <br><br>
+        Semua kue kami dibuat dengan cinta setiap hari, agar Anda bisa menikmati kelembutan dan rasa khas buatan rumah
+        yang aman dan lezat untuk semua usia.
+      </p>
+    </div>
+  </div>
+
+
+  <!-- Favorit -->
+  <div id="favorit" class="page hidden">
+    <h3 style="text-align:center;">❤️ Produk Favorit Saya</h3>
+    <div id="daftarFavorit" class="produk-grid" style="margin-top:20px;"></div>
+  </div>
+
+
+  <!-- Keranjang -->
+  <div id="keranjang" class="page hidden">
+    <h3 style="text-align:center;">🛒 Keranjang Belanja</h3>
+    <div id="daftarKeranjang" style="margin-top:20px;"></div>
+    <div style="text-align:center; margin-top: 20px;">
+      <button onclick="checkoutKeranjang()"
+        style="padding:10px 20px; background:#d35400; color:white; border:none; border-radius:8px; font-weight:bold;">Checkout
+        Semua</button>
+    </div>
+  </div>
+
+
+  <!-- Edit Profil -->
+  <div id="editProfilModal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:999;">
+    <form onsubmit="simpanProfilBaru(event)"
+      style="background:#fffaf4; padding:24px; border-radius:16px; width:90%; max-width:400px; box-shadow:0 10px 25px rgba(0,0,0,0.25);">
+      <h3 style="text-align:center; margin-bottom:20px; color:#d35400;">Edit Profil</h3>
+      <label style="font-weight:bold;">Nama Baru</label>
+      <input type="text" id="editUsername" required
+        style="width:100%; padding:10px; margin-bottom:16px; border-radius:8px; border:1px solid #ccc;">
+      <label style="font-weight:bold;">Peran</label>
+      <select id="editRole" required
+        style="width:100%; padding:10px; margin-bottom:20px; border-radius:8px; border:1px solid #ccc;">
+        <option value="user">🛍 Pembeli</option>
+        <option value="admin">🛠 Admin</option>
+      </select>
+      <div style="display:flex; gap:10px;">
+        <button type="submit"
+          style="flex:1; padding:10px; background:#f57c00; color:white; border:none; border-radius:8px; font-weight:bold;">Simpan</button>
+        <button type="button" onclick="tutupEditProfil()"
+          style="flex:1; padding:10px; background:#fbe9e7; color:#5d4037; border:none; border-radius:8px; font-weight:bold;">Batal</button>
+      </div>
+    </form>
+  </div>
+
+
+  <!-- Notif Pesanan Berhasl -->
+  <div id="successPopup"
+    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff7ec; border:2px solid #ffcc80; border-radius:16px; padding:20px 30px; box-shadow:0 8px 24px rgba(0,0,0,0.2); text-align:center; z-index:9999; font-family:'Quicksand', sans-serif;">
+    <div style="font-size:32px; margin-bottom:10px;">🎉</div>
+    <div style="font-size:18px; color:#5d4037; font-weight:bold;">Pesanan Berhasil!</div>
+  </div>
+
+
+  <!-- Notif Harus Login Dulu  -->
+  <div id="alertLoginBox"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); justify-content:center; align-items:center; z-index:9999;">
+    <div
+      style="background:#fffaf0; padding:24px 30px; border-radius:18px; text-align:center; box-shadow:0 8px 20px rgba(0,0,0,0.25); max-width:320px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/1034/1034149.png" style="width:60px; margin-bottom:12px;" />
+      <h3 style="color:#d35400; margin-bottom:10px;">Oops!</h3>
+      <p style="margin-bottom:20px;">Kamu harus login dulu sebelum memesan ya~ 🍰</p>
+      <button onclick="closeLoginAlert()"
+        style="padding:10px 18px; background:#ffb74d; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Login
+        Sekarang</button>
+    </div>
+  </div>
+
+
+  <!-- Chat Whatsapp -->
+  <a href="https://wa.me/6285871757899?text=Halo%20saya%20mau%20pesan%20bolunya" class="wa-float" target="_blank"
+    aria-label="Chat WhatsApp">
+    <img src="https://img.icons8.com/fluency/48/000000/whatsapp.png" alt="Chat via WhatsApp" />
+  </a>
+
+
+  <!-- Alert Pesanan Berhasil Dimasukan Keranjang -->
+  <div id="toast" style="
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #323232;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+">
+    Produk berhasil dimasukkan ke keranjang!
+  </div>
+
+
+  <!-- Grafik -->
+  <div id="grafik" class="page hidden">
+    <h3 style="text-align:center;">📊 Statistik Penjualan</h3>
+    <canvas id="chartCanvas" style="max-width:600px; margin:20px auto; display:block;"></canvas>
+  </div>
+
+
+  <!-- Navbar -->
+  <div id="navbarWrapper" style="
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  background: white;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+">
+
+    <nav id="navbar">
+      <a id="navBeranda" href="#" onclick="showPage('beranda')"><small>Beranda🏠</small></a>
+      <a id="navPesanan" href="#" onclick="showPage('pesanan')"><small>Pesanan📦</small></a>
+      <a id="navProfil" href="#" onclick="showPage('profil')"><small>Profil👤</small></a>
+      <a id="navTentang" href="#" onclick="showPage('tentang')"><small>Tentang Kamiℹ️</small></a>
+      <a id="navFavorit" href="#" onclick="showPage('favorit')"><small>Favorit❤️</small></a>
+      <a id="navKeranjang" href="#" onclick="showPage('keranjang')"
+        style="position: relative;"><small>Keranjang🛒</small><span id="keranjangNotif"
+          style="position: absolute;top: -8px;right: -10px;background: red;color: white;font-size: 12px;font-weight: bold;padding: 2px 6px;border-radius: 50%;display: none;">0</span></a>
+      <a id="navGrafik" href="#" onclick="showPage('grafik')" style="display: none;"><small>Grafik📈</small></a>
+
+    </nav>
+    <div id="navIndicator"></div>
+  </div>
+
+
+  <!-- Javascript -->
+  <script>
+    //Alert Pesanan Berhasil Di Masukan Keranjang
+    function showToast(pesan) {
+      const toast = document.getElementById("toast");
+      toast.textContent = pesan;
+      toast.style.opacity = "1";
+      toast.style.transform = "translateX(-50%) translateY(0)";
+
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateX(-50%) translateY(20px)";
+      }, 2500);
+    }
+
+
+    // Tampilkan form pemesanan jika user sudah login
+    function showForm(product) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user) {
+        showLoginAlert();
+        return;
+      }
+      document.getElementById("selectedProduct").value = product;
+      document.getElementById("formModal").style.display = "flex";
+    }
+
+
+    // Tutup form pemesanan
+    function closeForm() {
+      document.getElementById("formModal").style.display = "none";
+    }
+
+
+    // Logout dan muat ulang halaman
+    function logout() {
+      localStorage.removeItem("user");
+      location.reload();
+    }
+
+
+    // Tampilkan halaman sesuai id, dan pindahkan strip navbar ke menu aktif
+    function showPage(id) {
+      document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+      document.getElementById(id).classList.remove("hidden");
+
+      if (id === "pesanan") tampilkanPesanan();
+      if (id === "favorit") tampilkanFavorit();
+      sinkronkanFavoritBeranda();
+      if (id === "keranjang") tampilkanKeranjang();
+      if (id === "grafik") tampilkanGrafik();
+
+
+      const navItems = document.querySelectorAll("#navbar a");
+      navItems.forEach(a => a.classList.remove("active"));
+
+      const indicator = document.getElementById("navIndicator");
+      const activeLink = document.getElementById(
+        id === "beranda" ? "navBeranda" :
+          id === "pesanan" ? "navPesanan" :
+            id === "profil" ? "navProfil" :
+              id === "tentang" ? "navTentang" :
+                id === "favorit" ? "navFavorit" :
+                  id === "keranjang" ? "navKeranjang" :
+                    id === "grafik" ? "navGrafik" : ""
+      );
+
+      if (activeLink) {
+        activeLink.classList.add("active");
+
+        // Gunakan offset dari kiri relatif terhadap navbar
+        const navbar = document.getElementById("navbar");
+        const offsetLeft = activeLink.offsetLeft;
+        const width = activeLink.offsetWidth;
+
+        indicator.style.width = width + "px";
+        indicator.style.transform = `translateX(${offsetLeft}px)`;
+      }
+    }
+
+
+    // Menampilkan daftar pesanan milik user (admin bisa lihat semua)
+    function tampilkanPesanan() {
+      const container = document.getElementById("daftarPesananPerProduk");
+      const semuaPesanan = JSON.parse(localStorage.getItem("pesanan")) || [];
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      if (!user) {
+        container.innerHTML = "<p style='text-align:center;'>Silakan login terlebih dahulu.</p>";
+        return;
+      }
+
+      let pesananUser = semuaPesanan;
+      if (user.role !== "admin") {
+        pesananUser = semuaPesanan.filter(p => p.userLogin === user.username);
+      }
+
+      if (pesananUser.length === 0) {
+        container.innerHTML = "<p style='text-align:center;'>Belum ada pesanan.</p>";
+        return;
+      }
+
+      const statusColor = {
+        "Belum Bayar": "#ff7043",
+        "Sudah Dibayar": "#42a5f5",
+        "Sedang Diproses": "#ffa726",
+        "Selesai": "#66bb6a"
+      };
+
+      const badgeStatus = status => `
+    <span style="
+      background: ${statusColor[status] || "#ccc"};
+      color: white;
+      padding: 4px 10px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: bold;
+      display: inline-block;
+    ">${status}</span>`;
+
+      const metodeBadge = m => `
+    <span style="
+      background: ${m === "COD" ? "#6d4c41" : "#039be5"};
+      color: white;
+      padding: 4px 10px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+    ">${m}</span>`;
+
+      let html = pesananUser.map((p, index) => `
+    <div style="
+      display: flex;
+      gap: 16px;
+      background: #ffffff;
+      padding: 16px;
+      margin-bottom: 18px;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+      position: relative;
+      align-items: flex-start;
+    ">
+      <div>
+        <img src="${p.bukti || 'https://cdn-icons-png.flaticon.com/512/891/891419.png'}" 
+             alt="Bukti"
+             style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
+      </div>
+      <div style="flex:1">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h4 style="margin: 0; color: #d35400;">🧁 ${p.product}</h4>
+          ${user.role === "admin" ? `
+            <button onclick="hapusPesanan(${index})"
+              style="background: #e57373; color:white; border:none; border-radius:8px; padding:6px 10px; font-size:13px; cursor:pointer;">
+              🗑️
+            </button>` : ""
+        }
+        </div>
+
+        <p style="margin: 4px 0;"><strong>👤</strong> ${p.name}</p>
+        <p style="margin: 4px 0;"><strong>📞</strong> ${p.phone}</p>
+        <p style="margin: 4px 0;"><strong>🔢 Jumlah:</strong> ${p.quantity}</p>
+        <p style="margin: 4px 0;"><strong>💳 Metode:</strong> ${metodeBadge(p.method)}</p>
+        <p style="margin: 4px 0;"><strong>📅 Tanggal:</strong> ${p.tanggal || '-'}</p>
+        <div style="margin-top: 8px;"><strong>✅ Status:</strong><br>
+          ${user.role === "admin" ? `
+            <select onchange="ubahStatus(${index}, this.value)" style="
+              margin-top: 6px;
+              padding: 8px;
+              border-radius: 8px;
+              border: 1px solid #ccc;
+              font-weight: bold;
+            ">
+              ${["Belum Bayar", "Sudah Dibayar", "Sedang Diproses", "Selesai"].map(status => `
+                <option value="${status}" ${p.status === status ? "selected" : ""}>${status}</option>
+              `).join("")}
+            </select>
+          ` : badgeStatus(p.status)}
+        </div>
+      </div>
+    </div>
+  `).join("");
+
+      container.innerHTML = html;
+    }
+
+
+
+    // Hapus pesanan berdasarkan index setelah konfirmasi
+    function hapusPesanan(index) {
+      if (confirm("Yakin ingin menghapus pesanan ini?")) {
+        const semuaPesanan = JSON.parse(localStorage.getItem("pesanan")) || [];
+        semuaPesanan.splice(index, 1);
+        localStorage.setItem("pesanan", JSON.stringify(semuaPesanan));
+        tampilkanPesanan();
+      }
+    }
+
+
+    // Ubah status pesanan lalu perbarui tampilannya
+    function ubahStatus(index, status) {
+      const semuaPesanan = JSON.parse(localStorage.getItem("pesanan")) || [];
+      semuaPesanan[index].status = status;
+      localStorage.setItem("pesanan", JSON.stringify(semuaPesanan));
+      tampilkanPesanan();
+    }
+
+
+    // Inisialisasi saat halaman dimuat: tampilkan user, setup form, dll.
+    window.addEventListener("DOMContentLoaded", () => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user) {
+        document.getElementById("userName").textContent = user.username;
+        document.getElementById("userRole").textContent = user.role;
+      }
+
+      showPage("beranda");
+
+      document.getElementById("role").addEventListener("change", function () {
+        const isAdmin = this.value === "admin";
+        const field = document.getElementById("adminPasswordField");
+        field.style.display = isAdmin ? "block" : "none";
+      });
+
+      // Tampilkan menu Grafik hanya untuk admin
+      const navGrafik = document.getElementById("navGrafik");
+      if (user?.role === "admin") {
+        navGrafik.style.display = "inline-block";
+      } else {
+        navGrafik.style.display = "none";
+      }
+
+
+      document.getElementById("loginForm").onsubmit = e => {
+        e.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const role = document.getElementById("role").value;
+        const inputPassword = document.getElementById("adminPassword").value;
+
+        // Password admin rahasia (TIDAK DISIMPAN DI BROWSER/HTML)
+        const ADMIN_PASSWORD = "kuebolusuper2024"; // GANTI dengan password rahasia kamu
+
+        if (role === "admin") {
+          if (inputPassword !== ADMIN_PASSWORD) {
+            alert("Password admin salah! Akses ditolak.");
+            return;
+          }
+        }
+
+        localStorage.setItem("user", JSON.stringify({ username, role }));
+        location.reload();
+      };
+
+      document.getElementById("bookingForm").onsubmit = function (e) {
+        e.preventDefault();
+        const user = JSON.parse(localStorage.getItem("user"));
+        const form = e.target;
+        const name = form.name.value;
+        const phone = form.phone.value;
+        const product = form.product.value;
+        const quantity = form.quantity.value;
+        const method = form.paymentMethod.value;
+        const file = form.buktiBayar.files[0];
+        const status = method === "COD" ? "Belum Bayar" : "Sudah Dibayar";
+
+        const hariList = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        const now = new Date();
+        const hari = hariList[now.getDay()];
+        const tanggal = `${hari}, ${now.getDate().toString().padStart(2, '0')}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+
+        function simpan(bukti) {
+          const semuaPesanan = JSON.parse(localStorage.getItem("pesanan")) || [];
+          const checkoutData = JSON.parse(localStorage.getItem("checkoutKeranjangData"));
+
+          if (checkoutData && checkoutData.length > 0) {
+            // Banyak produk dari keranjang
+            checkoutData.forEach(item => {
+              semuaPesanan.push({
+                name, phone,
+                product: item.product,
+                quantity: item.quantity,
+                method, status, bukti, tanggal,
+                userLogin: user?.username
+              });
+            });
+
+            localStorage.removeItem("checkoutKeranjangData");
+            localStorage.removeItem("keranjang");
+            updateKeranjangNotif();
+            tampilkanKeranjang();
+          } else {
+            // Satu produk
+            semuaPesanan.push({
+              name, phone, product, quantity, method, status, bukti, tanggal,
+              userLogin: user?.username
+            });
+          }
+
+          localStorage.setItem("pesanan", JSON.stringify(semuaPesanan));
+          tampilkanPesanBerhasil();
+          closeForm();
+          showPage("pesanan");
+        }
+
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = () => simpan(reader.result);
+          reader.readAsDataURL(file);
+        } else {
+          simpan(null);
+        }
+      };
+
+
+
+      // Login/Logout button visibility
+      const userNow = JSON.parse(localStorage.getItem("user"));
+      const loginBtnEl = document.getElementById("loginBtn");
+      const logoutBtnEl = document.getElementById("logoutBtn");
+      const btnEditProfil = document.getElementById("btnEditProfil");
+
+      if (userNow) {
+        btnEditProfil.style.display = "inline-block";
+        loginBtnEl.style.display = "none";
+        logoutBtnEl.style.display = "inline-block";
+      } else {
+        btnEditProfil.style.display = "none";
+        loginBtnEl.style.display = "inline-block";
+        logoutBtnEl.style.display = "none";
+      }
+
+
+
+      if (loginBtnEl && logoutBtnEl) {
+        if (userNow) {
+          loginBtnEl.style.display = "none";
+          logoutBtnEl.style.display = "inline-block";
+        } else {
+          loginBtnEl.style.display = "inline-block";
+          logoutBtnEl.style.display = "none";
+        }
+      }
+      setTimeout(() => {
+        const defaultPage = "beranda";
+        const navElement = document.getElementById("nav" + defaultPage.charAt(0).toUpperCase() + defaultPage.slice(1));
+        if (navElement) {
+          const indicator = document.getElementById("navIndicator");
+          indicator.style.width = navElement.offsetWidth + "px";
+          indicator.style.transform = `translateX(${navElement.offsetLeft}px)`;
+        }
+      }, 200);
+
+      const favoritList = JSON.parse(localStorage.getItem("favorit")) || [];
+      document.querySelectorAll(".produk-card").forEach(card => {
+        const nama = card.querySelector("h4").textContent;
+        const btnFavorit = card.querySelector("button");
+        if (favoritList.includes(nama)) {
+          btnFavorit.textContent = "❤️";
+        }
+      });
+
+
+    });
+
+
+    // Filter produk berdasarkan input pencarian (nama produk)
+    document.getElementById("searchInput").addEventListener("input", function () {
+      const keyword = this.value.toLowerCase();
+      const produkList = document.querySelectorAll(".produk-card");
+
+      produkList.forEach(function (produk) {
+        const namaProduk = produk.getAttribute("data-nama").toLowerCase();
+        if (namaProduk.includes(keyword)) {
+          produk.classList.remove("tersembunyi");
+        } else {
+          produk.classList.add("tersembunyi");
+        }
+      });
+    });
+
+
+
+    // Tampilkan animasi emoji sementara saat tombol ditekan
+    function showEmojiAnimation(button) {
+      const emoji = document.createElement("div");
+      emoji.className = "floating-emoji";
+      emoji.innerText = "🍰"; // bisa diganti jadi 🎂, 💖, 🎉, dsb
+
+      const rect = button.getBoundingClientRect();
+      emoji.style.left = rect.left + rect.width / 2 + "px";
+      emoji.style.top = rect.top + window.scrollY + "px";
+
+      document.body.appendChild(emoji);
+
+      setTimeout(() => {
+        emoji.remove();
+      }, 1000);
+    }
+
+
+    // Tampilkan popup sukses selama 2.5 detik
+    function tampilkanPesanBerhasil() {
+      const popup = document.getElementById("successPopup");
+      popup.style.display = "block";
+
+      setTimeout(() => {
+        popup.style.display = "none";
+      }, 2500); // Hilang otomatis dalam 2.5 detik
+    }
+
+
+    // Tampilkan peringatan agar user login terlebih dahulu
+    function showLoginAlert() {
+      document.getElementById("alertLoginBox").style.display = "flex";
+    }
+
+
+    // Tutup peringatan login dan arahkan ke halaman login
+    function closeLoginAlert() {
+      document.getElementById("alertLoginBox").style.display = "none";
+      showPage("loginPage");
+    }
+
+
+    // Tambah fungsi rating
+    function renderRating() {
+      const ratings = JSON.parse(localStorage.getItem("ratings")) || {};
+      document.querySelectorAll(".produk-card").forEach(card => {
+        const productName = card.querySelector("h4").textContent;
+        const container = document.createElement("div");
+        container.style.marginTop = "8px";
+
+        const currentRating = ratings[productName] || { total: 0, count: 0 };
+        const avg = currentRating.count ? (currentRating.total / currentRating.count).toFixed(1) : "-";
+
+        container.innerHTML = `
+      <div style="font-size:18px; color:#ff9800; cursor:pointer;" data-produk="${productName}">
+        ${[1, 2, 3, 4, 5].map(n => `<span data-rate="${n}">★</span>`).join("")}
+      </div>
+      <div style="font-size:14px; color:#555;">Rating: ${avg} (${currentRating.count} penilaian)</div>
+      `;
+
+        const oldRating = card.querySelector(".rating");
+        if (oldRating) oldRating.remove();
+        container.classList.add("rating");
+        card.appendChild(container);
+
+        container.querySelectorAll("span").forEach(star => {
+          star.addEventListener("click", e => {
+            const rate = parseInt(star.getAttribute("data-rate"));
+            const name = star.parentElement.getAttribute("data-produk");
+            if (!ratings[name]) ratings[name] = { total: 0, count: 0 };
+            ratings[name].total += rate;
+            ratings[name].count += 1;
+            localStorage.setItem("ratings", JSON.stringify(ratings));
+            renderRating(); // refresh rating
+          });
+        });
+      });
+    }
+
+    // Panggil saat halaman dimuat
+    window.addEventListener("DOMContentLoaded", () => {
+      renderRating();
+      updateKeranjangNotif();
+    });
+
+
+    // Tambah atau hapus produk dari daftar favorit
+    function toggleFavorit(btn) {
+      const card = btn.closest(".produk-card");
+      const namaProduk = card.querySelector("h4").textContent;
+      let favorit = JSON.parse(localStorage.getItem("favorit")) || [];
+
+      if (favorit.includes(namaProduk)) {
+        favorit = favorit.filter(n => n !== namaProduk);
+        btn.textContent = "🤍";
+      } else {
+        favorit.push(namaProduk);
+        btn.textContent = "❤️";
+      }
+
+      localStorage.setItem("favorit", JSON.stringify(favorit));
+    }
+
+
+    // Menampilkan produk yang sudah ditandai sebagai favorit
+    function tampilkanFavorit() {
+      const favorit = JSON.parse(localStorage.getItem("favorit")) || [];
+      const container = document.getElementById("daftarFavorit");
+      container.innerHTML = "";
+
+      if (favorit.length === 0) {
+        container.innerHTML = "<p style='text-align:center;'>Belum ada produk favorit.</p>";
+        return;
+      }
+
+      const semuaProduk = document.querySelectorAll("#beranda .produk-card");
+
+      favorit.forEach(namaFav => {
+        semuaProduk.forEach(card => {
+          const nama = card.querySelector("h4").textContent;
+          if (nama === namaFav) {
+            const clone = card.cloneNode(true);
+
+            // Ganti fungsi tombol favorit di halaman Favorit
+            const btnFav = clone.querySelector("button");
+            btnFav.textContent = "❤️";
+            btnFav.onclick = () => {
+              let fav = JSON.parse(localStorage.getItem("favorit")) || [];
+              fav = fav.filter(n => n !== nama);
+              localStorage.setItem("favorit", JSON.stringify(fav));
+              tampilkanFavorit(); // refresh halaman favorit
+            };
+
+            container.appendChild(clone);
+          }
+        });
+      });
+
+      // Sinkronkan tombol love di Beranda
+      document.querySelectorAll("#beranda .produk-card").forEach(card => {
+        const nama = card.querySelector("h4").textContent;
+        const btn = card.querySelector("button");
+        if (favorit.includes(nama)) {
+          btn.textContent = "❤️";
+        } else {
+          btn.textContent = "🤍";
+        }
+      });
+    }
+
+
+    // inkronkan Favorit Beranda
+    function sinkronkanFavoritBeranda() {
+      const favorit = JSON.parse(localStorage.getItem("favorit")) || [];
+      document.querySelectorAll("#beranda .produk-card").forEach(card => {
+        const nama = card.querySelector("h4").textContent;
+        const btn = card.querySelector("button");
+        if (favorit.includes(nama)) {
+          btn.textContent = "❤️";
+        } else {
+          btn.textContent = "🤍";
+        }
+      });
+    }
+
+
+
+    // Tambahkan event listener untuk input jumlah dan produk
+    document.querySelector("input[name='quantity']").addEventListener("input", hitungDiskon);
+    document.querySelector("input[name='product']").addEventListener("input", hitungDiskon);
+
+
+    // Menghitung total harga dan diskon jika beli lebih dari 3 produk
+    function hitungDiskon() {
+      const jumlah = parseInt(document.querySelector("input[name='quantity']").value) || 0;
+      const produk = document.querySelector("input[name='product']").value;
+
+      // Daftar harga produk (sesuaikan dengan produkmu)
+      const hargaProduk = {
+        "Bolu Coklat": 20000,
+        "Bolu Keju": 25000,
+        "Bolu Pandan": 22000
+      };
+
+      const hargaSatuan = hargaProduk[produk] || 0;
+      let total = hargaSatuan * jumlah;
+      let diskon = 0;
+
+      if (jumlah > 3) {
+        diskon = total * 0.10;
+        total -= diskon;
+      }
+
+      const info = document.getElementById("infoDiskon");
+      if (jumlah > 0 && hargaSatuan > 0) {
+        info.innerHTML = `
+      <hr style="margin:10px 0;">
+      <p><strong>Harga Satuan:</strong> Rp ${hargaSatuan.toLocaleString()}</p>
+      ${diskon > 0 ? `<p style="color:green;"><strong>Diskon 10%:</strong> - Rp ${diskon.toLocaleString()}</p>` : ""}
+      <p><strong>Total Bayar:</strong> Rp ${total.toLocaleString()}</p>
+      `;
+      } else {
+        info.innerHTML = "";
+      }
+    }
+
+
+    // Menambahkan produk ke keranjang belanja di localStorage
+    function tambahKeKeranjang(btn) {
+      const card = btn.closest(".produk-card");
+      const nama = card.querySelector("h4").textContent;
+      const keranjang = JSON.parse(localStorage.getItem("keranjang")) || [];
+
+      const index = keranjang.findIndex(item => item.nama === nama);
+      if (index >= 0) {
+        keranjang[index].jumlah += 1;
+      } else {
+        keranjang.push({ nama, jumlah: 1 });
+      }
+
+      localStorage.setItem("keranjang", JSON.stringify(keranjang));
+      showToast("Produk ditambahkan ke keranjang!");
+      updateKeranjangNotif();
+
+    }
+
+
+    // Menampilkan isi keranjang belanja dari localStorage ke halaman
+    function tampilkanKeranjang() {
+      const keranjang = JSON.parse(localStorage.getItem("keranjang")) || [];
+      const daftar = document.getElementById("daftarKeranjang");
+      const hargaProduk = {
+        "Bolu Coklat": 20000,
+        "Bolu Keju": 25000,
+        "Bolu Pandan": 22000
+      };
+      const gambarProduk = {
+        "Bolu Coklat": "./cake/brownis besar.jpg",
+        "Bolu Keju": "./cake/brownis kecil full keju.jpg",
+        "Bolu Pandan": "./cake/bolu pandan.jpg"
+      };
+
+      if (keranjang.length === 0) {
+        daftar.innerHTML = "<p style='text-align:center;'>Keranjang masih kosong 🍰</p>";
+        updateKeranjangNotif();
+        return;
+      }
+
+      let totalSemua = 0;
+      let html = keranjang.map((item, i) => {
+        const harga = hargaProduk[item.nama] || 0;
+        const subtotal = harga * item.jumlah;
+        totalSemua += subtotal;
+
+        return `
+      <div style="
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        background: #fff8ee;
+        padding: 12px;
+        border-radius: 14px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        margin-bottom: 14px;
+      ">
+        <img src="${gambarProduk[item.nama]}" style="width: 64px; height: 64px; object-fit: cover; border-radius: 12px;" />
+        <div style="flex: 1;">
+          <h4 style="margin: 0; font-size: 16px;">${item.nama}</h4>
+          <p style="margin: 4px 0; color: #f57c00;">Rp ${harga.toLocaleString()} x ${item.jumlah} = <strong>Rp ${subtotal.toLocaleString()}</strong></p>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button onclick="ubahJumlah(${i}, -1)" style="padding: 6px 10px; border: none; border-radius: 6px; background: #ddd;">-</button>
+            <span>${item.jumlah}</span>
+            <button onclick="ubahJumlah(${i}, 1)" style="padding: 6px 10px; border: none; border-radius: 6px; background: #ddd;">+</button>
+          </div>
+        </div>
+        <button onclick="hapusDariKeranjang(${i})" style="
+          background: #ef5350;
+          color: white;
+          border: none;
+          padding: 8px 12px;
+          border-radius: 8px;
+          font-weight: bold;
+          cursor: pointer;
+        ">🗑️</button>
+      </div>
+    `;
+      }).join("");
+
+      html += `
+    <div style="text-align: center; font-size: 16px; margin-top: 10px;">
+      <strong>Total Semua:</strong> Rp ${totalSemua.toLocaleString()}
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+    </div>
+  `;
+
+      daftar.innerHTML = html;
+    }
+
+
+    function ubahJumlah(index, perubahan) {
+      const keranjang = JSON.parse(localStorage.getItem("keranjang")) || [];
+      if (!keranjang[index]) return;
+
+      keranjang[index].jumlah += perubahan;
+      if (keranjang[index].jumlah < 1) keranjang[index].jumlah = 1;
+
+      localStorage.setItem("keranjang", JSON.stringify(keranjang));
+      tampilkanKeranjang();
+      updateKeranjangNotif();
+    }
+
+
+
+    // Hapus produk dari keranjang berdasarkan index
+    function hapusDariKeranjang(index) {
+      const keranjang = JSON.parse(localStorage.getItem("keranjang")) || [];
+      keranjang.splice(index, 1);
+      localStorage.setItem("keranjang", JSON.stringify(keranjang));
+      tampilkanKeranjang();
+    }
+
+
+    // Proses checkout semua item dari keranjang dan tampilkan form pemesanan
+    function checkoutKeranjang() {
+      const keranjang = JSON.parse(localStorage.getItem("keranjang")) || [];
+      if (keranjang.length === 0) {
+        alert("Keranjang kosong!");
+        return;
+      }
+
+      // Ambil item pertama buat isi default
+      const item = keranjang[0];
+      document.getElementById("selectedProduct").value = "Checkout Keranjang";
+
+      // Simpan data keranjang ke state sementara
+      localStorage.setItem("checkoutKeranjangData", JSON.stringify(keranjang));
+
+      // Tampilkan form
+      document.getElementById("formModal").style.display = "flex";
+    }
+
+
+    // Tampilkan form edit profil dengan data user yang sedang login
+    function bukaEditProfil() {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user) {
+        alert("Silakan login terlebih dahulu.");
+        return;
+      }
+      document.getElementById("editUsername").value = user.username;
+      document.getElementById("editRole").value = user.role;
+      document.getElementById("editProfilModal").style.display = "flex";
+    }
+
+
+    // Menutup form edit profil
+    function tutupEditProfil() {
+      document.getElementById("editProfilModal").style.display = "none";
+    }
+
+
+    // Simpan perubahan profil ke localStorage dan perbarui tampilan
+    function simpanProfilBaru(e) {
+      e.preventDefault();
+      const usernameBaru = document.getElementById("editUsername").value;
+      const roleBaru = document.getElementById("editRole").value;
+
+      localStorage.setItem("user", JSON.stringify({
+        username: usernameBaru,
+        role: roleBaru
+      }));
+
+      // Perbarui tampilan profil
+      document.getElementById("userName").textContent = usernameBaru;
+      document.getElementById("userRole").textContent = roleBaru;
+
+      tutupEditProfil();
+      alert("Profil berhasil diperbarui!");
+    }
+
+
+    // Perbarui notifikasi jumlah item di ikon keranjang
+    function updateKeranjangNotif() {
+      const keranjang = JSON.parse(localStorage.getItem("keranjang")) || [];
+      const notifEl = document.getElementById("keranjangNotif");
+
+      if (keranjang.length > 0) {
+        const totalItem = keranjang.reduce((acc, item) => acc + item.jumlah, 0);
+        notifEl.textContent = totalItem;
+        notifEl.style.display = "inline-block";
+      } else {
+        notifEl.style.display = "none";
+      }
+    }
+
+
+    function tampilkanGrafik() {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user || user.role !== "admin") {
+        document.getElementById("grafik").innerHTML = "<p style='text-align:center;'>Hanya admin yang bisa melihat grafik.</p>";
+        return;
+      }
+
+      const pesanan = JSON.parse(localStorage.getItem("pesanan")) || [];
+      const dataProduk = {};
+
+      pesanan.forEach(p => {
+        const namaProduk = p.product?.trim();
+        if (!namaProduk) return; // skip kalau kosong/undefined
+
+        if (!dataProduk[namaProduk]) dataProduk[namaProduk] = 0;
+        dataProduk[namaProduk] += parseInt(p.quantity || 0);
+      });
+
+      const labels = Object.keys(dataProduk);
+      const values = Object.values(dataProduk);
+
+      const ctx = document.getElementById("chartCanvas").getContext("2d");
+
+      if (window.grafikPenjualan) {
+        window.grafikPenjualan.destroy();
+      }
+
+      window.grafikPenjualan = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Jumlah Terjual",
+            data: values,
+            backgroundColor: "#ff7043"
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${ctx.parsed.y} terjual`
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { stepSize: 1 }
+            }
+          }
+        }
+      });
+    }
+
+
+  </script>
+</body>
+
+</html>
